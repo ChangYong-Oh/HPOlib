@@ -12,7 +12,7 @@ runsolver/src/*
 runsolver-3.3.4.tar.bz2
 
 # benchmark runs
-HPOlib/benchmarks/*/*_*/*
+benchmarks/*/*--*/**
 runsolver-3.3.4.tar.bz2
 
 # Java plugins
