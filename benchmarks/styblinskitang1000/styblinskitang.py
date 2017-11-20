@@ -23,7 +23,7 @@ import time
 import HPOlib.benchmarks.benchmark_util as benchmark_util
 
 
-ndim = 200
+ndim = 1000
 
 
 def styblinskitang(xx):
