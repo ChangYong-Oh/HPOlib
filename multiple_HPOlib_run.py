@@ -5,6 +5,8 @@ import subprocess
 
 
 def multiple_runs(optimizer_dir, working_dir):
+	optimizer_dir = os.path.realpath(optimizer_dir)
+	working_dir = os.path.realpath(working_dir)
 	n_sample_run = 5
 	process_list = []
 	for i in range(n_sample_run):
