@@ -12,6 +12,7 @@ def multiple_runs(optimizer_dir, working_dir):
 		f = open(os.devnull, 'w')
 		process = subprocess.Popen(cmd_str, shell=True, stdout=f, stderr=f)
 		process_list.append(process)
+	n_running = n_sample_run
 	while n_running > 0:
 		time.sleep(60)
 		running = [elm.poll() is None for elm in process_list]
