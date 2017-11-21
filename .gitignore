@@ -5,7 +5,6 @@ docs/build/*
 
 # Optimizers
 *_src*
-!optimizers/spearmint/spearmint_april2013_mod_src
 optimizers/irace/irace/
 
 # Runsolver
