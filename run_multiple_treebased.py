@@ -43,7 +43,8 @@ def run_multiple_treebased(optimizer_dir, benchmark_dir, func_name_list=[]):
 
 	print('All experiments have started.')
 
-	while [p.poll() for p in process_list].count(None) > 0:
+	n_running = [elm.poll() is None for elm in process_list].count(True)
+	while n_running > 0:
 		time.sleep(10)
 		n_running = [elm.poll() is None for elm in process_list].count(True)
 		print('Currently running experiments(%s) %d/%d(running)' % (datetime.now().strftime('%Y%m%d-%H:%M:%S:%f'), n_running, n_exp))
