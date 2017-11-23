@@ -50,8 +50,4 @@ def run_multiple_treebased(optimizer_dir, benchmark_dir, func_name_list=[]):
 
 
 if __name__ == '__main__':
-	print(os.path.realpath(sys.argv[1]))
-	print(sys.argv[2])
-	print(sys.argv[3:])
-	exit()
 	run_multiple_treebased(sys.argv[1], sys.argv[2], sys.argv[3:])
