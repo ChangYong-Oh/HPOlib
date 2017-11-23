@@ -24,5 +24,10 @@ def multiple_runs(optimizer_dir, working_dir):
 	print('Done')
 
 
+def multiple_runs_continue(benchmark_dir, exp_dir_list):
+	for exp_dir in exp_dir_list:
+		cmd_str = 'HPOlib-run -o ' + os.path.realpath(optimizer_dir) + ' --cwd ' + working_dir
+
+
 if __name__ == '__main__':
 	multiple_runs(sys.argv[1], sys.argv[2])

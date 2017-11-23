@@ -61,4 +61,3 @@ def main(job_id, params):
     result = command_line_function(params, cli_target)
     return result
 
-
