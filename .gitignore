@@ -4,7 +4,15 @@ docs/build/*
 *.py[cod]
 
 # Optimizers
-*_src*
+optimizers/hyperopt_august2013_mod_src/
+optimizers/smac/smac_2_06_01-dev_src/
+optimizers/smac/smac_2_08_00-master_src/
+optimizers/smac/smac_2_10_00-dev_src/
+optimizers/smac_2_06_01-dev_src/
+optimizers/smac_2_08_00-master_src/
+optimizers/smac_2_10_00-dev_src/
+optimizers/spearmint_april2013_mod_src/
+optimizers/tpe/hyperopt_august2013_mod_src/
 optimizers/irace/irace/
 
 # Runsolver
