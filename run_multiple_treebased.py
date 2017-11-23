@@ -30,6 +30,8 @@ def run_multiple_treebased(optimizer_dir, benchmark_dir, func_name_list=[]):
 			cmd_str = cmd_str_list[n_started]
 			f = open(os.devnull, 'w')
 			process_list.append(subprocess.Popen(cmd_str, shell=True, stdout=f, stderr=f))
+			print('Experiment has been started by command %s' % cmd_str)
+			sys.stdout.flush()
 			n_started += 1
 		if os.getloadavg()[0] > 16:
 			beginning_phase = False
