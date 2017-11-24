@@ -31,7 +31,7 @@ import scipy.linalg   as spla
 import scipy.stats    as sps
 import scipy.optimize as spo
 import cPickle
-import multiprocessing
+from pathos import multiprocessing
 
 from Locker import *
 
