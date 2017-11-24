@@ -47,4 +47,7 @@ def run_multiple_spearmint_continue(optimizer_dir, exp_dir_list):
 
 
 if __name__ == '__main__':
-	run_multiple_spearmint_init(sys.argv[1], sys.argv[2])
+	if len(sys.argv) == 3:
+		run_multiple_spearmint_init(sys.argv[1], sys.argv[2])
+	else:
+		run_multiple_spearmint_continue(sys.argv[1], sys.argv[2:])
