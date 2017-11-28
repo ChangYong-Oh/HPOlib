@@ -23,7 +23,7 @@ import time
 import HPOlib.benchmarks.benchmark_util as benchmark_util
 
 
-ndim = 50
+ndim = 20
 
 
 def michalewicz(xx):
@@ -36,6 +36,7 @@ def michalewicz(xx):
         xi = (xx[ii] + 1) * 0.5 * math.pi
         new = -math.sin(xi) * math.sin(xi ** 2 * (ii + 1) / math.pi) ** (2 * m)
         sum_ += new
+    sum_ /= float(d)
 
     return sum_
 
