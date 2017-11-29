@@ -5,6 +5,7 @@ docs/build/*
 
 # Optimizers
 *_src*
+!optimizers/spearmint/spearmint_april2013_mod_src/ExperimentGrid.py
 optimizers/irace/irace/
 
 # Runsolver
