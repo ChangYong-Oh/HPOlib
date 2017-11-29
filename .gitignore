@@ -6,6 +6,7 @@ docs/build/*
 # Optimizers
 *_src*
 !optimizers/spearmint/spearmint_april2013_mod_src/ExperimentGrid.py
+!optimizers/spearmint/spearmint_april2013_mod_src/GPEIOptChooser.py
 optimizers/irace/irace/
 
 # Runsolver
@@ -58,6 +59,8 @@ nosetests.xml
 
 # pycharm
 .idea
+
+run_bash.sh
 
 # Others
 *~
