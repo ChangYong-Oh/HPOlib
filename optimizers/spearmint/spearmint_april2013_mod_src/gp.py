@@ -26,7 +26,7 @@ import numpy as np
 import scipy.linalg as spla
 import scipy.optimize as spo
 import scipy.io as sio
-import weave
+import scipy.weave
 try:
     import matplotlib.pyplot as plt
 except:
@@ -77,8 +77,8 @@ def grad_dist2(ls, x1, x2=None):
         for (int d=0; d<D; d++)
           gX(i,j,d) = (2/ls(d))*(x1(i,d) - x2(j,d));
     """
-    weave.inline(code, ['x1','x2','gX','ls','M','N','D'], \
-                       type_converters=weave.converters.blitz, \
+    scipy.weave.inline(code, ['x1','x2','gX','ls','M','N','D'], \
+                       type_converters=scipy.weave.converters.blitz, \
                        compiler='gcc')
 
     # The C code weave above is 10x faster than this:

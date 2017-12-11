@@ -146,11 +146,25 @@ def main():
     else:
         domain = hyperopt.Domain(fn, search_space, rseed=int(args.seed))
         trials = hyperopt.Trials()
+        results = []
+        miscs = []
+        for i in range(2):
+            misc = dict()
+            misc['tid'] = i
+            misc['idxs'] = {elm: i for elm in search_space.keys()}
+            misc['cmd'] = ('domain_attachment', 'FMinIter_Domain')
+            misc['vals'] = {elm: [i] for elm in search_space.keys()}
+            misc['workdir'] = None
+            miscs.append(miscs)
+            result = {'status': hyperopt.STATUS_NEW, 'loss': None}
+            results.append(result)
+        trials.insert_trial_docs(trials.new_trial_docs([elm['tid'] for elm in miscs], [None] * 2, results, miscs))
+        sys.stderr.write(str(trials))
         fh = open(state_filename, "w")
         # By this we probably loose the seed; not too critical for a restart
         cPickle.dump({"trials": trials, "domain": domain}, fh)
         fh.close()
-    
+
     for i in range(int(args.maxEvals) + 1):
         # in exhaust, the number of evaluations is max_evals - num_done
         rval = hyperopt.FMinIter(tpe_with_seed, domain, trials, max_evals=i)
