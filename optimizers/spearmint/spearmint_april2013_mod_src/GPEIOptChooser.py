@@ -23,6 +23,7 @@ import os
 import gp
 import sys
 import util
+import psutil
 import tempfile
 import copy
 import numpy          as np
@@ -224,22 +225,41 @@ class GPEIOptChooser:
 
             # This is old code to optimize each point in parallel. Uncomment
             # and replace if multiprocessing doesn't work
-            for i in xrange(0, cand2.shape[0]):
-                sys.stderr.write("Optimizing candidate %d/%d\n" % (i+1, cand2.shape[0]))
-                self.check_grad_ei(cand2[i, :].flatten(), comp, pend, vals)
-                ret = spo.fmin_l_bfgs_b(self.grad_optimize_ei_over_hypers, cand2[i,:].flatten(), args=(comp,pend,vals),
-                                        bounds=b, disp=0)
-                cand2[i, :] = ret[0]
-
-            cand = np.vstack((cand, cand2))
+            # for i in xrange(0, cand2.shape[0]):
+            #     sys.stderr.write("Optimizing candidate %d/%d\n" % (i+1, cand2.shape[0]))
+            #     self.check_grad_ei(cand2[i, :].flatten(), comp, pend, vals)
+            #     ret = spo.fmin_l_bfgs_b(self.grad_optimize_ei_over_hypers, cand2[i,:].flatten(), args=(comp,pend,vals),
+            #                             bounds=b, disp=0)
+            #     cand2[i, :] = ret[0]
+            #
+            # cand = np.vstack((cand, cand2))
 
             # Optimize each point in parallel
             # pool = multiprocessing.Pool(self.grid_subset)
             # results = [pool.apply_async(optimize_pt,args=(
             #             c,b,comp,pend,vals,copy.copy(self))) for c in cand2]
-            # for res in results:
-            #     cand = np.vstack((cand, res.get(1e8)))
-            # pool.close()
+
+            pool = multiprocessing.Pool(self.grid_subset)
+            results = []
+            process_started = [False] * self.grid_subset
+            process_running = [False] * self.grid_subset
+            process_index = 0
+            while process_started.count(False) > 0:
+                cpu_usage = psutil.cpu_percent(0.2)
+                run_more = (100.0 - cpu_usage) * float(psutil.cpu_count()) > 500.0
+                if run_more:
+                    results.append(pool.apply_async(optimize_pt, args=(cand2[process_index], b, comp, pend, vals, copy.copy(self))))
+                    process_started[process_index] = True
+                    process_running[process_index] = True
+                    process_index += 1
+            while process_running.count(True) > 0:
+                time.sleep(1)
+                process_running = [not p.ready() for p in results]
+
+
+            for res in results:
+                cand = np.vstack((cand, res.get(1e8)))
+            pool.close()
 
             overall_ei = self.ei_over_hypers(comp,pend,cand,vals)
             best_cand = np.argmax(np.mean(overall_ei, axis=1))
