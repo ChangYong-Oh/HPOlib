@@ -188,7 +188,26 @@ class ExperimentGrid:
     def _hypercube_grid(self, dims, size):
         # Generate from a sobol sequence
         sobol_grid = np.transpose(i4_sobol_generate(dims,size,self.seed))
-                
+
+        n_added = 0
+
+        center_pt_val = (0 + 1) / 2.0  # center
+        center_vector_mask = (sobol_grid == 0.5).all(1)
+        center_vector_ind = np.where(center_vector_mask)[0]
+        center_vector = np.ones((1, dims)) * center_pt_val
+        n_added += center_vector_ind.size == 0
+
+        conner_pt_val = (1 + 1) / 2.0  # corner
+        conner_vector_mask = (sobol_grid == conner_pt_val).all(1)
+        conner_vector_ind = np.where(conner_vector_mask)[0]
+        conner_vector = np.ones((1, dims)) * conner_pt_val
+        n_added += conner_vector_ind.size == 0
+
+        normal_pt_ind = np.where(np.logical_and(~center_vector_mask, ~conner_vector_mask))[0]
+        normal_pt = sobol_grid[normal_pt_ind][:-n_added]
+
+        sobol_grid = np.vstack((center_vector, conner_vector, normal_pt))
+
         return sobol_grid
 
 class GridMap:
