@@ -23,10 +23,6 @@ import time
 import HPOlib.benchmarks.benchmark_util as benchmark_util
 
 
-ndim = 1000
-
-
-
 def branin(xx):
     import math
 
@@ -55,7 +51,7 @@ def main(params, **kwargs):
     print 'kwargs: ', kwargs
 
     xx = []
-    for i in range(1, ndim + 1):
+    for i in range(1, len(params) + 1):
         xx.append(float(params["x" + str(i)]))
 
     y = branin(xx)

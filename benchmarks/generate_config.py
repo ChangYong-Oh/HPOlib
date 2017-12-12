@@ -30,4 +30,4 @@ def generate_config(ndim):
 	py_file.close()
 
 if __name__ == '__main__':
-	generate_config(1000)
+	generate_config(500)

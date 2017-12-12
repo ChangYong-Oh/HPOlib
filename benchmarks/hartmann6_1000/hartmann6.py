@@ -24,9 +24,6 @@ import numpy as np
 import HPOlib.benchmarks.benchmark_util as benchmark_util
 
 
-ndim = 1000
-
-
 def hartmann6(xx):
     alpha = np.array([1.0, 1.2, 3.0, 3.2])
     a = np.array([[10.0, 3.00, 17.0, 3.50, 1.70, 8.00],
@@ -68,10 +65,10 @@ def main(params, **kwargs):
     print 'kwargs: ', kwargs
 
     xx = []
-    for i in range(1, ndim + 1):
+    for i in range(1, len(params) + 1):
         xx.append(float(params["x" + str(i)]))
 
-    y = camelback(xx)
+    y = hartmann6(xx)
     return y
 
 
