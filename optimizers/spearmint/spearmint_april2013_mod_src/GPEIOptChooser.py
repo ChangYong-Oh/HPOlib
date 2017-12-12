@@ -256,7 +256,6 @@ class GPEIOptChooser:
                 time.sleep(1)
                 process_running = [not p.ready() for p in results]
 
-
             for res in results:
                 cand = np.vstack((cand, res.get(1e8)))
             pool.close()
