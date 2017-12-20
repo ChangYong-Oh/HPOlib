@@ -197,16 +197,22 @@ class ExperimentGrid:
         center_vector = np.ones((1, dims)) * center_pt_val
         n_added += center_vector_ind.size == 0
 
-        conner_pt_val = (1 + 1) / 2.0  # corner
-        conner_vector_mask = (sobol_grid == conner_pt_val).all(1)
-        conner_vector_ind = np.where(conner_vector_mask)[0]
-        conner_vector = np.ones((1, dims)) * conner_pt_val
-        n_added += conner_vector_ind.size == 0
+        # conner_pt_val = (1 + 1) / 2.0  # corner
+        # conner_vector_mask = (sobol_grid == conner_pt_val).all(1)
+        # conner_vector_ind = np.where(conner_vector_mask)[0]
+        # conner_vector = np.ones((1, dims)) * conner_pt_val
+        # n_added += conner_vector_ind.size == 0
 
-        normal_pt_ind = np.where(np.logical_and(~center_vector_mask, ~conner_vector_mask))[0]
+        random_pt_val = np.random.uniform(0, 1, (1, dims))  # random
+        random_vector_mask = (sobol_grid == 0.5).all(1)
+        random_vector_ind = np.where(random_vector_mask)[0]
+        random_vector = np.ones((1, dims)) * random_pt_val
+        n_added += random_vector_ind.size == 0
+
+        normal_pt_ind = np.where(np.logical_and(~center_vector_mask, ~random_vector_mask))[0]
         normal_pt = sobol_grid[normal_pt_ind][:-n_added]
 
-        sobol_grid = np.vstack((center_vector, conner_vector, normal_pt))
+        sobol_grid = np.vstack((center_vector, random_vector, normal_pt))
 
         return sobol_grid
 
