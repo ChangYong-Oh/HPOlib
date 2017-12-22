@@ -156,7 +156,7 @@ def main():
             misc['tid'] = i
             misc['idxs'] = {elm: i for elm in search_space.keys()}
             misc['cmd'] = ('domain_attachment', 'FMinIter_Domain')
-            misc['vals'] = {elm: [i] for elm in search_space.keys()}
+            misc['vals'] = {elm: [i if i == 0 else np.random.uniform(-1, 1)] for elm in search_space.keys()}
             misc['workdir'] = None
             miscs.append(misc)
             result = {'status': hyperopt.STATUS_NEW}
