@@ -60,6 +60,8 @@ nosetests.xml
 # pycharm
 .idea
 
+*-ubyte
+
 run_bash.sh
 
 # Others
