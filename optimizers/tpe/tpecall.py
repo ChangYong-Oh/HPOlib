@@ -154,7 +154,7 @@ def main():
             tids.append(tid)
             misc = dict()
             misc['tid'] = i
-            misc['idxs'] = {elm: i for elm in search_space.keys()}
+            misc['idxs'] = {elm: [i] for elm in search_space.keys()}
             misc['cmd'] = ('domain_attachment', 'FMinIter_Domain')
             misc['vals'] = {elm: [i if i == 0 else np.random.uniform(-1, 1)] for elm in search_space.keys()}
             misc['workdir'] = None
