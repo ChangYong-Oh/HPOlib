@@ -664,7 +664,7 @@ class Bandit(object):
     template - pyll specification of search domain
 
     evaluate - interruptible/checkpt calling convention for evaluation routine
-
+    
     """
     # -- the Ctrl object is not used directly, but rather
     #    a live Ctrl instance is inserted for the pyll_ctrl
