@@ -670,7 +670,7 @@ def toposort(expr):
     for node in dfs(expr):
         G.add_edges_from([(n_in, node) for n_in in node.inputs()])
     order = nx.topological_sort(G)
-    assert list(order)[-1] == expr
+    assert list(order)[-1] == expr #modified part
     return order
 
 
