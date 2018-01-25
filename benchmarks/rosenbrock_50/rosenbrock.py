@@ -23,9 +23,6 @@ import time
 import HPOlib.benchmarks.benchmark_util as benchmark_util
 
 
-ndim = 50
-
-
 def rosenbrock(xx):
 
     d = len(xx)
@@ -36,7 +33,7 @@ def rosenbrock(xx):
         new = 100.0 * (xiplus1 - xi ** 2) ** 2 + (xi - 1) ** 2
         sum_ += new
 
-    normalizer = 50000.0 / ((90 ** 2 + 9 ** 2) * (ndim - 1))
+    normalizer = 50000.0 / ((90 ** 2 + 9 ** 2) * (d - 1))
     return sum_ * normalizer
 
 
@@ -45,7 +42,7 @@ def main(params, **kwargs):
     print 'kwargs: ', kwargs
 
     xx = []
-    for i in range(1, ndim + 1):
+    for i in range(1, len(params) + 1):
         xx.append(float(params["x" + str(i)]))
 
     y = rosenbrock(xx)

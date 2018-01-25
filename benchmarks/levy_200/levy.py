@@ -34,7 +34,7 @@ def levy(xx):
         new = (xi - 1.0) ** 2 * (1.0 + 10.0 * math.sin(math.pi * xi + 1.0) ** 2.0)
         sum_ += new
     xi = (xx[d - 1] * 10.0 - 1.0) / 4.0 + 1.0
-    new = (xi - 1.0) ** 2 * (1.0 + math.sin(2.0 * math.pi * xi + 1.0) ** 2.0)
+    new = (xi - 1.0) ** 2 * (1.0 + math.sin(2.0 * math.pi * xi) ** 2.0)
     sum_ += new
 
     return sum_
