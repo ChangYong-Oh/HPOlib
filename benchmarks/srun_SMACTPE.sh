@@ -5,6 +5,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -12,6 +13,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -19,6 +21,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -26,6 +29,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 
@@ -36,6 +40,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd b
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -43,6 +48,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd h
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -50,6 +56,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd r
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -57,6 +64,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd l
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 
@@ -67,6 +75,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -74,6 +83,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -81,6 +91,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -88,6 +99,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 
@@ -98,6 +110,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd b
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -105,6 +118,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd h
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -112,6 +126,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd r
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -119,6 +134,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd l
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 
@@ -129,6 +145,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -136,6 +153,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -143,6 +161,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -150,6 +169,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/tpe/hyperopt_august2013_mod -s $SEED -
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 
@@ -160,6 +180,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd b
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -167,6 +188,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd h
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -174,6 +196,7 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd r
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
 
 SEED=$(( ( RANDOM % 20000 )  + 1 ))
@@ -181,4 +204,5 @@ COMMAND="srun HPOlib-run -o ../optimizers/smac/smac_2_10_00-dev -s $SEED --cwd l
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
 echo "==============================$srun COMMAND=============================="
+echo "$COMMAND"
 eval "$COMMAND"
