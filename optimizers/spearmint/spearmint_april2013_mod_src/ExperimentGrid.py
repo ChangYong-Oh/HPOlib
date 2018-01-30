@@ -197,7 +197,7 @@ class ExperimentGrid:
         center_vector = np.ones((1, dims)) * center_pt_val
         n_added += center_vector_ind.size == 0
 
-        # conner_pt_val = (1 + 1) / 2.0 # corner
+        # conner_pt_val = (1 + 1) / 2.0 # corner point
         # conner_vector_mask = (sobol_grid == conner_pt_val).all(1)
         # conner_vector_ind = np.where(conner_vector_mask)[0]
         # conner_vector = np.ones((1, dims)) * conner_pt_val
