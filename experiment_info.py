@@ -11,7 +11,7 @@ def how_many_evaluations():
 			if not empty_prev:
 				print('-' * 107)
 			empty_prev = True
-			for run in os.listdir(benchmark_dir):
+			for run in sorted(os.listdir(benchmark_dir)):
 				run_dir = os.path.join(benchmark_dir, run)
 				output_dir = os.path.join(run_dir, 'output')
 				jobs_dir = os.path.join(run_dir, 'jobs')
