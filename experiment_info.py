@@ -9,7 +9,7 @@ def how_many_evaluations():
 		benchmark_dir = os.path.join(benchmarks_dir, benchmark)
 		if os.path.isdir(benchmark_dir):
 			if not empty_prev:
-				print('-' * 150)
+				print('-' * 120)
 			empty_prev = True
 			for run in os.listdir(benchmark_dir):
 				run_dir = os.path.join(benchmark_dir, run)
