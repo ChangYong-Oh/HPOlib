@@ -9,7 +9,7 @@ def how_many_evaluations():
 		benchmark_dir = os.path.join(benchmarks_dir, benchmark)
 		if os.path.isdir(benchmark_dir):
 			if not empty_prev:
-				print('-' * 120)
+				print('-' * 107)
 			empty_prev = True
 			for run in os.listdir(benchmark_dir):
 				run_dir = os.path.join(benchmark_dir, run)
@@ -23,7 +23,7 @@ def how_many_evaluations():
 					if len(out_file_list) > 0:
 						n_out = len(out_file_list)
 						n_job = len(job_file_list)
-						print("%-40s %-70s %3d %3d" % (benchmark, run, n_out, n_job))
+						print("%-40s %-58s %3d %3d" % (benchmark, run, n_out, n_job))
 						empty_prev = False
 
 
