@@ -13,7 +13,13 @@ from torch.nn.parameter import Parameter
 from torch.autograd import Variable
 import torch.cuda as cuda
 import torch.optim as optim
+from torch.utils.data import DataLoader, sampler
 from torchvision import datasets, transforms
+
+
+BATCH_SIZE = 64
+EPOCH = 20
+USE_VALIDATION = True
 
 
 class Net(nn.Module):
@@ -40,14 +46,21 @@ class Net(nn.Module):
 
 def load_mnist(batch_size, use_cuda):
 	kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
-	train_loader = torch.utils.data.DataLoader(
-	    datasets.MNIST('../data', train=True, download=True,
-	                   transform=transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])),
-	    batch_size=batch_size, shuffle=True, **kwargs)
-	test_loader = torch.utils.data.DataLoader(
-	    datasets.MNIST('../data', train=False, transform=transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])),
-	    batch_size=batch_size, shuffle=True, **kwargs)
-	return train_loader, test_loader
+	transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+	mnist_train = datasets.MNIST('../data', train=True, download=True, transform=transform)
+	mnist_test = datasets.MNIST('../data', train=False, transform=transform)
+	if USE_VALIDATION:
+		train_sampler = sampler.SubsetRandomSampler(range(45000))
+		validation_sampler = sampler.SubsetRandomSampler(range(45000, 50000))
+		train_loader = DataLoader(mnist_train, batch_size=batch_size, shuffle=False, sampler=train_sampler, **kwargs)
+		validation_loader = DataLoader(mnist_train, batch_size=batch_size, shuffle=False, sampler=validation_sampler, **kwargs)
+	else:
+		train_loader = DataLoader(mnist_train, batch_size=batch_size, shuffle=True, **kwargs)
+	test_loader = DataLoader(mnist_test, batch_size=batch_size, shuffle=False, **kwargs)
+	if USE_VALIDATION:
+		return train_loader, validation_loader, test_loader
+	else:
+		return train_loader, test_loader
 
 
 def train(train_loader, model, epoch, optimizer, use_cuda):
@@ -83,13 +96,9 @@ def test(test_loader, model, use_cuda):
 	test_accuracy = correct / float(len(test_loader.dataset))
 	return test_loss, test_accuracy
 
-batch_size = 64
-epoch = 20
-
 
 def mlp_weight(weight_vector):
 	use_cuda = cuda.is_available()
-	# use_cuda = False
 	model = Net(n_hid=weight_vector.numel()/10, hid_weight=weight_vector.view(10, -1))
 	for m in model.parameters():
 		if m.dim() == 2:
@@ -98,12 +107,18 @@ def mlp_weight(weight_vector):
 			m.data.normal_()
 	if use_cuda:
 		model.cuda()
-	train_loader, test_loader = load_mnist(batch_size, use_cuda)
+	if USE_VALIDATION:
+		train_loader, validation_loader, test_loader = load_mnist(BATCH_SIZE, use_cuda)
+	else:
+		train_loader, test_loader = load_mnist(BATCH_SIZE, use_cuda)
 	optimizer = optim.Adam(model.parameters())
-	train(train_loader, model, epoch, optimizer, use_cuda)
-	test_loss, test_accuracy = test(test_loader, model, use_cuda)
-	print('\nLoss : %f / Accuracy : %6.4f' % (test_loss, test_accuracy))
-	return test_loss
+	train(train_loader, model, EPOCH, optimizer, use_cuda)
+	if USE_VALIDATION:
+		loss, accuracy = test(validation_loader, model, use_cuda)
+	else:
+		loss, accuracy = test(test_loader, model, use_cuda)
+	print('\nLoss : %f / Accuracy : %6.4f' % (loss, accuracy))
+	return loss
 
 
 def main(params, **kwargs):
