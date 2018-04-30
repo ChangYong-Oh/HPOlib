@@ -152,12 +152,16 @@ def main():
         for i in range(2):
             tid = i
             tids.append(tid)
-            misc = dict()
-            misc['tid'] = i
-            misc['idxs'] = {elm: [i] for elm in search_space.keys()}
-            misc['cmd'] = ('domain_attachment', 'FMinIter_Domain')
-            misc['vals'] = {elm: [i if i == 0 else np.random.uniform(-1, 1)] for elm in search_space.keys()}
-            misc['workdir'] = None
+            misc = {'tid': i, 'cmd': ('domain_attachment', 'FMinIter_Domain'), 'workdir': None, 'idxs': dict(), 'vals': dict()}
+            for elm in search_space.keys():
+                misc['idxs'][elm] = [i]
+                if domain.params[elm].name == 'uniform':
+                    unif_low = domain.params[elm].arg['low'].obj
+                    unif_high = domain.params[elm].arg['high'].obj
+                    misc['vals'][elm] = (unif_low + unif_high) / 2.0 if i == 0 else np.random.uniform(unif_low, unif_high)
+                elif domain.params[elm].name == 'randint':
+                    randint_upper = domain.params[elm].arg['upper'].obj
+                    misc['vals'][elm] = [0 if i == 0 else np.random.randint(0, randint_upper)]
             miscs.append(misc)
             result = {'status': hyperopt.STATUS_NEW}
             results.append(result)
