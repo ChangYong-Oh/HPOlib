@@ -25,16 +25,15 @@ import HPOlib.benchmarks.benchmark_util as benchmark_util
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data.sampler import SubsetRandomSampler, SequentialSampler
+from torch.utils.data import Dataset
 
 import pandas as pd
 import numpy as np
 
 import os
 import pickle
-from progressbar import ProgressBar
 
+N_FEATURE = 50
 BATCH_SIZE = 128
 CSV_FILENAME = os.path.join(os.path.split(__file__)[0], 'connect_4.csv')
 SPLIT_RATIO = torch.FloatTensor([7.0, 9.0]) / 11.0
@@ -49,24 +48,10 @@ input_category = ['x', 'o', 'b']
 output_category = ['win', 'loss', 'draw']
 
 
-class NormalizeInput(object):
-	def __init__(self, mean, std):
-		self.mean = mean.view(-1)
-		self.std = std.view(-1)
-
-	def __call__(self, sample):
-		input_data, output_data = sample['input'], sample['output']
-
-		input_data = (input_data - self.mean) / self.std
-
-		return {'input': input_data, 'output': output_data}
-
-
 class Connect4(Dataset):
 
-	def __init__(self, csv_filename, transforms=None):
+	def __init__(self, csv_filename):
 		self.data_frame = pd.read_csv(csv_filename, sep=',')
-		self.transforms = transforms
 
 	def __len__(self):
 		return len(self.data_frame)
@@ -77,9 +62,7 @@ class Connect4(Dataset):
 		data_list = []
 		for feature in feature_names:
 			if isinstance(data_raw, pd.DataFrame):
-				var_data = torch.zeros(n_data, len(input_category))
-				hot_index = [input_category.index(data_raw.iloc[n][feature]) for n in range(n_data)]
-				var_data[torch.arange(0, n_data).long(), hot_index] = 1
+				var_data = torch.from_numpy((np.tile(np.array(input_category), (n_data, 1)) == data_raw[feature].as_matrix().reshape(n_data, 1)).astype(np.float32))
 			else:
 				var_data = torch.zeros(len(input_category))
 				var_data[input_category.index(data_raw[feature])] = 1
@@ -87,16 +70,14 @@ class Connect4(Dataset):
 
 		if isinstance(data_raw, pd.DataFrame):
 			x = torch.cat(data_list, dim=1)
-			y = torch.ones(n_data)
-			for i, cat in enumerate(input_category):
-				y[data_raw['win'] == cat] = i
+			y = np.empty(n_data)
+			for i, cat in enumerate(output_category):
+				y[(data_raw['win'] == cat).as_matrix()] = i
+			y = torch.from_numpy(y).long().unsqueeze(1)
 		else:
 			x = torch.cat(data_list, dim=0)
 			y = torch.LongTensor([output_category.index(data_raw['win'])])
 		sample = {'input': x, 'output': y}
-
-		if self.transforms:
-			sample = self.transforms(sample)
 
 		return sample
 
@@ -148,56 +129,53 @@ def data_shuffle(csv_filename, random_seed=1234):
 
 def data_split(csv_filename, normalize_filename, validation=True):
 	dataset = Connect4(csv_filename)
-	data_ind = range(len(dataset))
 	split_ind = (SPLIT_RATIO * len(dataset)).long()
-	if validation:
-		train_ind = data_ind[:split_ind[0]]
-		validation_ind = data_ind[split_ind[0]:split_ind[1]]
-		test_ind = data_ind[split_ind[1]:]
-	else:
-		train_ind = data_ind[:split_ind[1]]
-		test_ind = data_ind[split_ind[1]:]
 
 	normalize_file = open(normalize_filename)
 	normalize_data = pickle.load(normalize_file)
 	normalize_file.close()
 	if validation:
-		normalization_mean = torch.from_numpy(normalize_data['with validation']['mean'].astype(np.float32))
-		normalization_std = torch.from_numpy(normalize_data['with validation']['std'].astype(np.float32))
+		normalization_mean = torch.from_numpy(normalize_data['with validation']['mean'].astype(np.float32)).view(1, -1)
+		normalization_std = torch.from_numpy(normalize_data['with validation']['std'].astype(np.float32)).view(1, -1)
 	else:
-		normalization_mean = torch.from_numpy(normalize_data['without validation']['mean'].astype(np.float32))
-		normalization_std = torch.from_numpy(normalize_data['without validation']['std'].astype(np.float32))
+		normalization_mean = torch.from_numpy(normalize_data['without validation']['mean'].astype(np.float32)).view(1, -1)
+		normalization_std = torch.from_numpy(normalize_data['without validation']['std'].astype(np.float32)).view(1, -1)
 
-	normalization = NormalizeInput(mean=normalization_mean, std=normalization_std)
-	dataset = Connect4(csv_filename, transforms=normalization)
-
-	train_sampler = SubsetRandomSampler(train_ind)
-	if validation:
-		validation_sampler = SequentialSampler(validation_ind)
-	test_sampler = SequentialSampler(test_ind)
-
-	train_loader = DataLoader(dataset, batch_size=BATCH_SIZE, sampler=train_sampler)
-	if validation:
-		validation_loader = DataLoader(dataset, batch_size=BATCH_SIZE, sampler=validation_sampler)
-	test_loader = DataLoader(dataset, batch_size=BATCH_SIZE, sampler=test_sampler)
+	dataset = Connect4(csv_filename)
 
 	if validation:
-		return train_loader, validation_loader, test_loader
+		train_data = dataset[:split_ind[0].item()]
+		validation_data = dataset[split_ind[0].item():split_ind[1].item()]
+		test_data = dataset[split_ind[1].item():]
+		train_data['input'] = (train_data['input'] - normalization_mean) / normalization_std
+		validation_data['input'] = (validation_data['input'] - normalization_mean) / normalization_std
+		test_data['input'] = (test_data['input'] - normalization_mean) / normalization_std
+		return train_data, validation_data, test_data
 	else:
-		return train_loader, test_loader
+		train_data = dataset[:split_ind[1].item()]
+		test_data = dataset[split_ind[1].item():]
+		train_data['input'] = (train_data['input'] - normalization_mean) / normalization_std
+		test_data['input'] = (test_data['input'] - normalization_mean) / normalization_std
+		return train_data, test_data
 
 
 def training(csv_filename, normalize_filename, feature_selection):
 	assert np.in1d(feature_selection, [True, False]).all()
 
-	epochs = 5
+	epochs = 20
 
-	train_loader, validation_loader, test_loader = data_split(csv_filename, normalize_filename)
+	train_data, validation_data, test_data = data_split(csv_filename, normalize_filename)
+	n_train = train_data['output'].size(0)
+	n_validation = validation_data['output'].size(0)
+	n_test = test_data['output'].size(0)
 	# onehot encoded input dim : 3 * (42 + 8 dummy)
 	feature_mask = []
 	for i, feature in enumerate(feature_names):
 		feature_mask += [feature_selection[i]] * (len(input_category))
 	feature_mask = torch.ByteTensor(feature_mask)
+	train_data['input'] = train_data['input'][:, feature_mask]
+	validation_data['input'] = validation_data['input'][:, feature_mask]
+	test_data['input'] = test_data['input'][:, feature_mask]
 
 	model = nn.Linear(torch.sum(feature_mask), 3)
 	nn.init.xavier_normal_(model.weight)
@@ -205,32 +183,28 @@ def training(csv_filename, normalize_filename, feature_selection):
 
 	loss_func = nn.CrossEntropyLoss(size_average=True)
 	optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
-	bar = ProgressBar(max_value=epochs)
 	for e in range(epochs):
-		for i, batch in enumerate(train_loader):
+		shuffled_ind = torch.randperm(n_train)
+		train_data['input'] = train_data['input'][shuffled_ind]
+		train_data['output'] = train_data['output'][shuffled_ind]
+		for i in range(0, n_train, BATCH_SIZE):
 			optimizer.zero_grad()
-			input_data = batch['input']
-			output_data = batch['output']
-			prediction = model.forward(input_data[:, feature_mask])
-			loss = loss_func.forward(prediction, output_data.squeeze(1))
+			input_data = train_data['input'][i:i + BATCH_SIZE]
+			output_data = train_data['output'][i:i + BATCH_SIZE]
+			soft_pred = model.forward(input_data)
+			loss = loss_func.forward(soft_pred, output_data.squeeze(1))
 			loss.backward()
 			optimizer.step()
-		bar.update(e)
-	bar.finish()
 
-	n_eval = 0
-	loss_validation = 0
-	accuracy = 0
-	for i, batch in enumerate(validation_loader):
-		input_data = batch['input']
-		output_data = batch['output']
-		soft_pred = model.forward(input_data[:, feature_mask])
-		_, hard_pred = torch.max(soft_pred, 1)
-		n_eval += output_data.size(0)
-		loss_validation += loss_func.forward(soft_pred, output_data.squeeze(1)) * output_data.size(0)
-		accuracy += torch.sum(hard_pred == output_data).float()
-	print('\nValidation Loss : %8.6f Accuracy : %6.4f at %4d-th epoch' % (loss_validation / n_eval, accuracy / n_eval, e + 1))
-	return loss_validation / n_eval
+	input_data = validation_data['input']
+	output_data = validation_data['output']
+	soft_pred = model.forward(input_data)
+	_, hard_pred = torch.max(soft_pred, 1)
+	loss_validation = loss_func.forward(soft_pred, output_data.squeeze(1))
+	acc_validation = torch.sum(hard_pred == output_data.squeeze(1)).float() / n_validation
+	loss_l0_reg = loss_validation + np.sum(feature_selection) / float(N_FEATURE) * 0.2
+	print('Validation Loss : %8.6f Accuracy : %6.4f Target : %8.6f N features %2d' % (loss_validation, acc_validation, loss_l0_reg, np.sum(feature_selection)))
+	return loss_l0_reg
 
 
 def connect_4(xx):
