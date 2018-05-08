@@ -110,7 +110,7 @@ class WrappingTestUtil(unittest.TestCase):
         """Test if we can convert a config with Sections and variables into an
         argparser. Test for arguments with whitespaces"""
         sys.argv = ['wrapping.py', '-s', '1', '-t', 'DBNet', '-o', 'SMAC',
-                    '--HPOLIB:function', 'python', '../pixel_7by7_group_2_mask.py']
+                    '--HPOLIB:function', 'python', '../connect_4.py']
         args, unknown = wrapping.use_arg_parser()
         self.assertEqual(len(unknown), 3)
         config = ConfigParser.SafeConfigParser(allow_no_value=True)
@@ -118,7 +118,7 @@ class WrappingTestUtil(unittest.TestCase):
         config_args = wrapping_util.parse_config_values_from_unknown_arguments(
             unknown, config)
         self.assertListEqual(vars(config_args)['HPOLIB:function'], ['python',
-            '../pixel_7by7_group_2_mask.py'])
+            '../connect_4.py'])
         self.assertIs(vars(config_args)['GRIDSEARCH:params'], None)
         self.assertIs(vars(config_args)['HPOLIB:result_on_terminate'], None)
 
