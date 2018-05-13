@@ -42,6 +42,7 @@ import torchvision.transforms as transforms
 import numpy as np
 import os
 import time
+import GPUtil
 from datetime import datetime
 from progressbar import ProgressBar
 
@@ -311,19 +312,20 @@ def training(architecture, lr=0.00005):
 		eval_loader = test_loader
 
 	epochs = 20
-	model = NasNet(architecture).cuda()
+	device = 'cuda:' + str(GPUtil.getAvailable('random', maxLoad=0.7)[0])
+	model = NasNet(architecture).cuda(device=device)
 	model.init_parameters()
 	n_total_params = np.sum([p.numel() for p in model.parameters()])
 	print('Number of parameters : %d' % n_total_params)
-	loss_func = nn.CrossEntropyLoss(size_average=True).cuda()
+	loss_func = nn.CrossEntropyLoss(size_average=True).cuda(device=device)
 
 	optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=0.0001)
 
 	best_eval_loss = np.inf
 	for e in range(epochs):
 		for i, batch in enumerate(train_loader):
-			train_input = batch[0].cuda()
-			train_output = batch[1].cuda()
+			train_input = batch[0].cuda(device=device)
+			train_output = batch[1].cuda(device=device)
 			before_softmax = model.forward(train_input)
 			loss = loss_func.forward(before_softmax, train_output)
 			loss.backward()
@@ -334,8 +336,8 @@ def training(architecture, lr=0.00005):
 			loss_eval = 0
 			acc_eval = 0
 			for i, batch in enumerate(eval_loader):
-				valid_input = batch[0].cuda()
-				valid_output = batch[1].cuda()
+				valid_input = batch[0].cuda(device=device)
+				valid_output = batch[1].cuda(device=device)
 				before_softmax_valid = model.forward(valid_input)
 				_, hard_pred_valid = torch.max(before_softmax_valid, 1)
 				loss_eval += loss_func.forward(before_softmax_valid, valid_output) * valid_output.numel()
