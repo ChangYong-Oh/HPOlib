@@ -346,8 +346,8 @@ def training(architecture, lr=0.00005):
 			print('(%s)%3d-th epoch lr : %.2E / Validation Loss : %8.6f Accuracy : %6.4f' % (time.strftime('%H:%M:%S', time.gmtime()), e + 1, lr, loss_eval / n_eval, acc_eval / n_eval))
 			if best_eval_loss >= loss_eval / n_eval:
 				best_eval_loss = loss_eval / n_eval
-		l0_reg = float(n_total_params) / 700000
-		return best_eval_loss + l0_reg * 0.1
+	l0_reg = float(n_total_params) / 700000
+	return best_eval_loss + l0_reg * 0.1
 
 
 def architecture_search(xx):
