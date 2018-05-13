@@ -46,8 +46,15 @@ import GPUtil
 from datetime import datetime
 from progressbar import ProgressBar
 
-DATA_ROOT_DIR_SPHERE = os.path.split(__file__)[0].split('/')[:-4]
-DATA_ROOT_DIR_HPOLIB = os.path.split(__file__)[0].split('/')[:-5]
+DATA_ROOT_DIR_OFFICE = '/home/coh1'
+DATA_ROOT_DIR_DAS5 = '/var/scratch/coh'
+DATA_ROOT_DIR_LISA = '/home/cyohgpu'
+if os.path.exists(DATA_ROOT_DIR_OFFICE):
+	DATA_ROOT = DATA_ROOT_DIR_OFFICE
+elif os.path.exists(DATA_ROOT_DIR_DAS5):
+	DATA_ROOT = DATA_ROOT_DIR_DAS5
+elif os.path.exists(DATA_ROOT_DIR_LISA):
+	DATA_ROOT = DATA_ROOT_DIR_LISA
 
 BATCH_SIZE = 128
 NUM_CLASSES = 10
@@ -75,7 +82,7 @@ for elm in feature_names:
 		categories[elm] = ['sep_conv_3', 'sep_conv_5', 'id', 'avg_pool_3', 'max_pool_3']
 
 
-def CIFAR10Dataloaders(data_root_dir=DATA_ROOT_DIR_HPOLIB, use_validset=True, batch_size=64, split_random_seed=1234):
+def CIFAR10Dataloaders(data_root_dir=DATA_ROOT, use_validset=True, batch_size=64, split_random_seed=1234):
 	num_workers = 3
 
 	data_dir = '/'.join(data_root_dir + ['Experiments', 'datasets', 'CIFAR10'])
