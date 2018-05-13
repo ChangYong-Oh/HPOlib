@@ -46,15 +46,15 @@ import GPUtil
 from datetime import datetime
 from progressbar import ProgressBar
 
-DATA_ROOT_DIR_OFFICE = ['/home/coh1']
-DATA_ROOT_DIR_DAS5 = ['/var/scratch/coh']
-DATA_ROOT_DIR_LISA = ['/home/cyohgpu']
+DATA_ROOT_DIR_OFFICE = '/home/coh1'
+DATA_ROOT_DIR_DAS5 = '/var/scratch/coh'
+DATA_ROOT_DIR_LISA = '/home/cyohgpu'
 if os.path.exists(DATA_ROOT_DIR_OFFICE):
-	DATA_ROOT = DATA_ROOT_DIR_OFFICE
+	DATA_ROOT = [DATA_ROOT_DIR_OFFICE]
 elif os.path.exists(DATA_ROOT_DIR_DAS5):
-	DATA_ROOT = DATA_ROOT_DIR_DAS5
+	DATA_ROOT = [DATA_ROOT_DIR_DAS5]
 elif os.path.exists(DATA_ROOT_DIR_LISA):
-	DATA_ROOT = DATA_ROOT_DIR_LISA
+	DATA_ROOT = [DATA_ROOT_DIR_LISA]
 
 BATCH_SIZE = 128
 NUM_CLASSES = 10
